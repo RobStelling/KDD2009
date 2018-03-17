@@ -299,7 +299,7 @@ for (resultado in resultados) {
 # Gera o plot de dupla densidade e ROC com as rotidas no WVPlots
   tituloTreinamento <- paste('Dados de treinamento:', rodadas)
   print(DoubleDensityPlot(treinamentoT, rodada, resultado, title=tituloTreinamento))
-  ggsave(paste('ddTreinamento-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
+  ggsave(paste('images/ddTreinamento-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
   print(ROCPlot(treinamentoT, rodada, resultado, objetivo, title=tituloTreinamento))
   ggsave(paste('images/ROCPTreinamento-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
 
