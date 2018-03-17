@@ -154,7 +154,7 @@ ggplot(performance, aes(rodadas)) +
   labs( y='Performance', caption='Intervalos de 2',
         title='Performance do xgboost sobre dados do KDD 2009',
         subtitle='Validação', colour='Tipo Previsão')
-ggsave("images/simples_performance.png", plot=last_plot(), device="png", scale=1)
+ggsave("images/performance_simples.png", plot=last_plot(), device="png", scale=1)
 
 ggplot(performance, aes(rodadas)) + 
   geom_line(aes(y=appetency, colour="Appetency"), size=1) + 
@@ -164,26 +164,26 @@ ggplot(performance, aes(rodadas)) +
         title='Performance do xgboost sobre dados do KDD 2009',
         subtitle='Validação', colour='Tipo Previsão') +
   ylim(-0.01, 1.01)
-ggsave("images/simples_performance_0_1.png", plot=last_plot(), device="png", scale=1)
+ggsave("images/performance_0_1_simples.png", plot=last_plot(), device="png", scale=1)
 
 ggplot(performance, aes(x=rodadas, y=appetency)) +
    geom_line(color="red", size=1) +
    labs( y='AUC - Appetency (Novos pacotes)',
          title='Appetency - AUC do xgboost de 20 a 300 rodadas')
-ggsave("images/simples_appetency.png", plot=last_plot(), device="png", scale=1)
+ggsave("images/appetency_simples.png", plot=last_plot(), device="png", scale=1)
 
 ggplot(performance, aes(x=rodadas, y=churn)) +
    geom_line(color="#009E73", size=1) +
    labs( y='AUC - Churn (Perda de clientes)',
          title='Churn - AUC do xgboost de 20 a 300 rodadas')
 
-ggsave("images/simples_churn.png", plot=last_plot(), device="png", scale=1)
+ggsave("images/churn__simples.png", plot=last_plot(), device="png", scale=1)
 
 ggplot(performance, aes(x=rodadas, y=upselling)) +
    geom_line(color="blue", size=1) +
    labs( y='AUC - Up-selling (Upgrades de pacotes)',
          title='Up-selling - AUC do xgboost de 20 a 300 rodadas')
-ggsave("images/simples_upselling.png", plot=last_plot(), device="png", scale=1)
+ggsave("images/upselling_simples.png", plot=last_plot(), device="png", scale=1)
 
 # O resultado obtido na validação deve ser um limite máximo
 # para a performance nos dados reais, já que é esperada uma
@@ -219,7 +219,7 @@ for (resultado in resultados) {
                     nrounds=rodadas)
 
 # Salva o modelo do  XGBoost
-  xgb.save(modelo, paste('models/simples_', resultado, '.model', sep=''))
+  xgb.save(modelo, paste('models/', resultado, '_simples.model', sep=''))
 
   treinamentoT[[rodada]] <- as.numeric(predict(modelo, as.matrix(dadosTreino[variaveis])))
   validacaoT[[rodada]] <- as.numeric(predict(modelo, as.matrix(dadosValidacao[variaveis])))
@@ -228,26 +228,26 @@ for (resultado in resultados) {
   teste[resultado] <- as.numeric(predict(modelo, as.matrix(teste[variaveis])))
   teste[resultado] <- ifelse(teste[resultado] <= 0.5, -1, 1)
   # E gera os arquivos com as previsões
-  write.table(teste[resultado], file=paste("output/simples_orange_small_test_", resultado, ".labels", sep=''),
+  write.table(teste[resultado], file=paste("output/orange_small_test_", resultado, "_simples.labels", sep=''),
               append=FALSE, quote=FALSE, row.names=FALSE, col.names=FALSE)
 
 # Gera o plot de dupla densidade e ROC com as rotidas no WVPlots
   tituloTreinamento <- paste('Dados de treinamento:', rodadas)
   print(DoubleDensityPlot(treinamentoT, rodada, resultado, title=tituloTreinamento))
-  ggsave(paste('images/simples_ddTreinamento-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
+  ggsave(paste('images/ddTreinamento-', resultado, '_simples.png', sep=''), plot=last_plot(), scale=1)
 
   print(ROCPlot(treinamentoT, rodada, resultado, objetivo, title=tituloTreinamento))
-  ggsave(paste('images/simples_ROCPTreinamento-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
+  ggsave(paste('images/ROCPTreinamento-', resultado, '_simples.png', sep=''), plot=last_plot(), scale=1)
 
   print(sprintf("AUC Treinamento (%d): %5.4f", rodadas,
                 auc(ifelse(treinamentoT[, resultado] == TRUE, 1, 0), treinamentoT[rodada])))
 
   tituloValidacao <- paste('Dados de validação:', rodadas)
   print(DoubleDensityPlot(validacaoT, rodada, resultado, title=tituloValidacao))
-  ggsave(paste('images/simples_ddValidacao-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
+  ggsave(paste('images/ddValidacao-', resultado, '_simples.png', sep=''), plot=last_plot(), scale=1)
 
   print(ROCPlot(validacaoT, rodada, resultado, objetivo, title=tituloValidacao))
-  ggsave(paste('images/simples_ROCPValidacao-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
+  ggsave(paste('images/ROCPValidacao-', resultado, '_simples.png', sep=''), plot=last_plot(), scale=1)
     
   aucValidacao <- auc(ifelse(validacaoT[, resultado] == TRUE, 1, 0), validacaoT[rodada])
   print(sprintf("AUC Validação (%d): %5.4f", rodadas, aucValidacao))
