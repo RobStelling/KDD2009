@@ -6,7 +6,7 @@
 #
 
 # Diretório dos dados
-path <- "~/Dropbox/KDD2009"
+path <- ".."
 setwd(path)
 
 # Leitura dos dados
@@ -236,6 +236,9 @@ teste <- read.table('data/orange_small_test.data', sep='\t', header=T, na.string
 
 # Nome da coluna do dataframe de previsões
 rodada <- 'previsao'
+
+# Salva matrix de performances
+write.table(performance, "output/performance_metricas.csv", append=F, dec=".", sep=",", col.names=T, row.names=F)
 
 for (resultado in resultados) {
   indice <- which.max(performance[,resultado,drop=T])
