@@ -187,7 +187,7 @@ ggplot(performance, aes(rodadas)) +
   labs( y='Performance', caption='Intervalos de 2',
         title='Performance do xgboost sobre dados do KDD 2009',
         subtitle='Validação', colour='Tipo Previsão')
-ggsave("images/performance.png", plot=last_plot(), device="png", scale=1)
+ggsave("imagens/performance.png", plot=last_plot(), device="png", scale=1)
 
 ggplot(performance, aes(rodadas)) + 
   geom_line(aes(y=appetency, colour="Appetency"), size=1) + 
@@ -197,26 +197,26 @@ ggplot(performance, aes(rodadas)) +
         title='Performance do xgboost sobre dados do KDD 2009',
         subtitle='Validação', colour='Tipo Previsão') +
   ylim(-0.01, 1.01)
-ggsave("images/performance_0_1.png", plot=last_plot(), device="png", scale=1)
+ggsave("imagens/performance_0_1.png", plot=last_plot(), device="png", scale=1)
 
 ggplot(performance, aes(x=rodadas, y=appetency)) +
    geom_line(color="red", size=1) +
    labs( y='AUC - Appetency (Novos pacotes)',
          title='Appetency - AUC do xgboost de 20 a 300 rodadas')
-ggsave("images/appetency.png", plot=last_plot(), device="png", scale=1)
+ggsave("imagens/appetency.png", plot=last_plot(), device="png", scale=1)
 
 ggplot(performance, aes(x=rodadas, y=churn)) +
    geom_line(color="#009E73", size=1) +
    labs( y='AUC - Churn (Perda de clientes)',
          title='Churn - AUC do xgboost de 20 a 300 rodadas')
 
-ggsave("images/churn.png", plot=last_plot(), device="png", scale=1)
+ggsave("imagens/churn.png", plot=last_plot(), device="png", scale=1)
 
 ggplot(performance, aes(x=rodadas, y=upselling)) +
    geom_line(color="blue", size=1) +
    labs( y='AUC - Up-selling (Upgrades de pacotes)',
          title='Up-selling - AUC do xgboost de 20 a 300 rodadas')
-ggsave("images/upselling.png", plot=last_plot(), device="png", scale=1)
+ggsave("imagens/upselling.png", plot=last_plot(), device="png", scale=1)
 
 # Com os planos de treinamento definidos anteriormente
 # em mãos, executamos outra vez o xgboost para os planos
@@ -287,7 +287,7 @@ for (resultado in resultados) {
                     nrounds=rodadas)
 
 # Salva o modelo do  XGBoost
-  xgb.save(modelo, paste('models/', resultado, '.model', sep=''))
+  xgb.save(modelo, paste('modelos/', resultado, '.model', sep=''))
 
   treinamentoT[[rodada]] <- as.numeric(predict(modelo, as.matrix(treinamentoTratado[vSelecionadas])))
   validacaoT[[rodada]] <- as.numeric(predict(modelo, as.matrix(validacaoTratado[vSelecionadas])))
@@ -302,18 +302,18 @@ for (resultado in resultados) {
 # Gera o plot de dupla densidade e ROC com as rotidas no WVPlots
   tituloTreinamento <- paste('Dados de treinamento:', rodadas)
   print(DoubleDensityPlot(treinamentoT, rodada, resultado, title=tituloTreinamento))
-  ggsave(paste('images/ddTreinamento-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
+  ggsave(paste('imagens/ddTreinamento-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
   print(ROCPlot(treinamentoT, rodada, resultado, objetivo, title=tituloTreinamento))
-  ggsave(paste('images/ROCPTreinamento-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
+  ggsave(paste('imagens/ROCPTreinamento-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
 
   print(sprintf("AUC Treinamento (%d): %5.4f", rodadas,
                 auc(ifelse(treinamentoT[, resultado] == TRUE, 1, 0), treinamentoT[rodada])))
 
   tituloValidacao <- paste('Dados de validação:', rodadas)
   print(DoubleDensityPlot(validacaoT, rodada, resultado, title=tituloValidacao))
-  ggsave(paste('images/ddValidacao-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
+  ggsave(paste('imagens/ddValidacao-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
   print(ROCPlot(validacaoT, rodada, resultado, objetivo, title=tituloValidacao))
-  ggsave(paste('images/ROCPValidacao-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
+  ggsave(paste('imagens/ROCPValidacao-', resultado, '.png', sep=''), plot=last_plot(), scale=1)
     
   aucValidacao <- auc(ifelse(validacaoT[, resultado] == TRUE, 1, 0), validacaoT[rodada])
   print(sprintf("AUC Validação (%d): %5.4f", rodadas, aucValidacao))
@@ -327,7 +327,7 @@ for (resultado in resultados) {
 # tratamento <- readRDS(arquivo)
 numResultado <- 1
 for (resultado in resultados) {
-  arquivo <- paste('models/', resultado, '.RDS', sep='')
+  arquivo <- paste('modelos/', resultado, '.RDS', sep='')
   saveRDS(planosTreinamento[[numResultado]], arquivo)
   print(arquivo)
   numResultado <- numResultado + 1
